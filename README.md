@@ -27,7 +27,8 @@ DREAMSMS_BASE_URL=https://www.dreams.sa/index.php/api
 DREAMSMS_USER=your_username
 DREAMSMS_SECRET_KEY=your_api_secret_key
 DREAMSMS_CLIENT_ID=your_oauth_client_id
-DREAMSMS_CLIENT_SECRET=your_oauth_client_secret
+DREAMSMS_CLIENT_SECRET=your_api_secret_key # as DREAMSMS_SECRET_KEY
+DREAMSMS_SENDER_NAME=your_sender_name
 ```
 
 ### 1.4 Config File (`config/dreamsms.php`)
@@ -35,12 +36,48 @@ DREAMSMS_CLIENT_SECRET=your_oauth_client_secret
 ```php
 return [
     'base_url'      => env('DREAMSMS_BASE_URL'),
-    'user'          => env('DREAMSMS_USER'),
+    'account_username'          => env('DREAMSMS_USER'),
     'secret_key'    => env('DREAMSMS_SECRET_KEY'),
     'client_id'     => env('DREAMSMS_CLIENT_ID'),
     'client_secret' => env('DREAMSMS_CLIENT_SECRET'),
+    'sender_name'  => env('DREAMSMS_SENDER_NAME'),
 ];
 ```
+
+# How To Get Sender Name, Account Username, client\_secret, and client\_id
+
+## 1. Account Username
+
+Your **Account Username** is the username you use to log in to your Dreams account.
+
+## 2. client\_id
+
+To obtain your **client\_id**:
+
+* Visit the following URL:
+
+  * [https://www.dreams.sa/user/ClientCredentials](https://www.dreams.sa/user/ClientCredentials)
+* Copy the displayed **client\_id**.
+
+## 3. client\_secret
+
+To retrieve your **client\_secret**:
+
+* Go to your profile page:
+
+  * [https://www.dreams.sa/user/myprofile](https://www.dreams.sa/user/myprofile)
+* Copy your **client\_secret** from the information displayed there.
+
+## 4. Sender Name
+
+To get your default **Sender Name**:
+
+* Navigate to:
+
+  * [https://www.dreams.sa/user/senders](https://www.dreams.sa/user/senders)
+* Identify and copy the default Sender Name from your listed sender names.
+
+
 
 ---
 
