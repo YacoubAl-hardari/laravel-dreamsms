@@ -11,19 +11,30 @@
     "sms-sending",
     "api-client"
   ],
+  "homepage": "https://github.com/YacoubAl-haidari/laravel-dreamsms",
+  "repository": "https://github.com/YacoubAl-haidari/laravel-dreamsms.git",
+  "support": {
+    "issues": "https://github.com/YacoubAl-haidari/laravel-dreamsms/issues",
+    "source": "https://github.com/YacoubAl-haidari/laravel-dreamsms"
+  },
   "authors": [
     {
       "name": "Yacoub Al-haidari",
-      "role": "Maintainer"
+      "role": "Maintainer",
+      "homepage": "https://github.com/YacoubAl-haidari"
     }
   ],
   "type": "library",
   "license": "MIT",
-  "autoload": {
-    "psr-4": {
-      "DreamSms\\LaravelDreamSms\\": "src/"
-    }
-  },
+    "autoload": {
+      "psr-4": {
+     "DreamSms\\LaravelDreamSms\\": "src/"
+      }
+    },
+    "require": {
+      "php": "^7.4|^8.0|^8.1|^8.2|^8.3|^8.4",
+      "illuminate/support": "^8.0|^9.0|^10.0|^11.0|^12.0"
+    },
   "extra": {
     "laravel": {
       "providers": [
@@ -33,13 +44,5 @@
         "DreamSms": "DreamSms\\LaravelDreamSms\\Facades\\DreamSms"
       }
     }
-  },
-  "require": {
-    "php": "^8.0",
-    "illuminate/support": "^9.0|^10.0"
-  },
-  "require-dev": {
-    "orchestra/testbench": "^7.0",
-    "phpunit/phpunit": "^9.0"
   }
 }
