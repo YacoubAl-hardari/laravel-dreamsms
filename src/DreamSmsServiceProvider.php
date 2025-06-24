@@ -24,7 +24,8 @@ class DreamSmsServiceProvider extends ServiceProvider
                 $app['config']['dreamsms.user'],
                 $app['config']['dreamsms.secret_key'],
                 $app['config']['dreamsms.client_id'],
-                $app['config']['dreamsms.client_secret']
+                $app['config']['dreamsms.client_secret'],
+                $app['config']['dreamsms.sender_name']
             );
         });
 

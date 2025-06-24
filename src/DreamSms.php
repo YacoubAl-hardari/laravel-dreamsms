@@ -12,19 +12,23 @@ class DreamSms
     protected string $secretKey;
     protected string $clientId;
     protected string $clientSecret;
+    protected string $senderName;
+
 
     public function __construct(
         ?string $baseUrl = null,
         ?string $user = null,
         ?string $secretKey = null,
         ?string $clientId = null,
-        ?string $clientSecret = null
+        ?string $clientSecret = null,
+        ?string $senderName = null,
     ) {
         $this->baseUrl      = rtrim($baseUrl ?? config('dreamsms.base_url'), '/');
         $this->user         = $user ?? config('dreamsms.user');
         $this->secretKey    = $secretKey ?? config('dreamsms.secret_key');
         $this->clientId     = $clientId ?? config('dreamsms.client_id');
         $this->clientSecret = $clientSecret ?? config('dreamsms.client_secret');
+        $this->senderName   = $senderName ?? config('dreamsms.sender_name');
     }
 
     /**
@@ -111,21 +115,21 @@ class DreamSms
         ]);
     }
 
-    public function addSender(string $sender): array
+    public function addSender(): array
     {
         return $this->post('newsender', [
             'user'       => $this->user,
             'secret_key' => $this->secretKey,
-            'sendertext' => $sender,
+            'sendertext' => $this->senderName,
         ]);
     }
 
-    public function senderStatus(string $sender): array
+    public function senderStatus(): array
     {
         return $this->post('senderstatus', [
             'user'       => $this->user,
             'secret_key' => $this->secretKey,
-            'sendertext' => $sender,
+            'sendertext' => $this->senderName,
         ]);
     }
 
@@ -140,7 +144,6 @@ class DreamSms
     public function sendSms(
         string $to,
         string $message,
-        string $sender,
         array $options = []
     ): array {
         return $this->post('sendsms', array_merge([
@@ -148,16 +151,16 @@ class DreamSms
             'secret_key' => $this->secretKey,
             'to'         => $to,
             'message'    => $message,
-            'sender'     => $sender,
+            'sender'     => $this->senderName,
         ], $options));
     }
 
-    public function sendMulti(array $toWithMsg, string $sender): array
+    public function sendMulti(array $toWithMsg): array
     {
         return $this->post('sendsms_multi', [
             'user'       => $this->user,
             'secret_key' => $this->secretKey,
-            'sender'     => $sender,
+            'sender'     => $this->senderName,
             'to'         => json_encode($toWithMsg, JSON_UNESCAPED_UNICODE),
         ]);
     }
