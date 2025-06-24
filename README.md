@@ -298,7 +298,6 @@ DreamSms::activate('newuser', '123456');
 | ----------- | ------ | -------- | -------------------------- |
 | user        | string | yes      | Username                   |
 | secret\_key | string | yes      | API key                    |
-| sendertext  | string | yes      | Sender name (max 11 chars) |
 
 ### Error Codes
 
@@ -321,7 +320,6 @@ DreamSms::activate('newuser', '123456');
 | ----------- | ------ | -------- | ----------- |
 | user        | string | yes      | Username    |
 | secret\_key | string | yes      | API key     |
-| sendertext  | string | yes      | Sender name |
 
 ### Status Values
 
@@ -370,7 +368,6 @@ DreamSms::activate('newuser', '123456');
 | secret\_key | string | API key                 |
 | to          | string | Recipient mobile number |
 | message     | string | Message body            |
-| sender      | string | Sender name             |
 
 ### Optional Calendar Fields (`is_calander = 1`)
 
@@ -388,7 +385,6 @@ DreamSms::activate('newuser', '123456');
 DreamSms::sendSms(
     '966512345678',
     'Meeting at 5pm',
-    'MyApp',
     [
         'is_calander'   => 1,
         'calander_date' => '2025-07-01',
@@ -420,7 +416,6 @@ DreamSms::sendSms(
 | ----------- | ------ | ------------------------------------------- |
 | user        | string | Username                                    |
 | secret\_key | string | API key                                     |
-| sender      | string | Sender name                                 |
 | to          | string | JSON: `{"9665...":"Msg1","9665...":"Msg2"}` |
 
 ### Example Usage
@@ -429,7 +424,7 @@ DreamSms::sendSms(
 DreamSms::sendMulti([
     '966512345678' => 'Hello Alice',
     '966512345679' => 'Hello Bob',
-], 'MySender');
+]);
 ```
 
 ### Response
