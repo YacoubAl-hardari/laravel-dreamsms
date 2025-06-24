@@ -1,0 +1,45 @@
+{
+  "name": "dreamsms/laravel-dreamsms",
+  "description": "A Laravel package providing a fluent, easy-to-use wrapper around the DreamSMS API for user registration, token management, sender configuration, balance inquiry and sending single or multi-recipient SMS messages. Developed by هوية الأحلام لتقنية المعلومات (Dreams), Saudi Arabia’s leading creative & tech service provider since 2006.",
+  "keywords": [
+    "laravel",
+    "sms",
+    "dreamsms",
+    "sms-api",
+    "notification",
+    "laravel-package",
+    "sms-sending",
+    "api-client"
+  ],
+  "authors": [
+    {
+      "name": "Yacoub Al-haidari",
+      "role": "Maintainer"
+    }
+  ],
+  "type": "library",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "DreamSms\\LaravelDreamSms\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "DreamSms\\LaravelDreamSms\\DreamSmsServiceProvider"
+      ],
+      "aliases": {
+        "DreamSms": "DreamSms\\LaravelDreamSms\\Facades\\DreamSms"
+      }
+    }
+  },
+  "require": {
+    "php": "^8.0",
+    "illuminate/support": "^9.0|^10.0"
+  },
+  "require-dev": {
+    "orchestra/testbench": "^7.0",
+    "phpunit/phpunit": "^9.0"
+  }
+}
