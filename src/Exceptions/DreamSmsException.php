@@ -85,18 +85,25 @@ class DreamSmsException extends Exception
      */
     public static function fromResponse(string $body, int $status): ?self
     {
+        $body = trim($body);
+
+        if ($body === '') {
+            return new static(
+                '🚫 عذرًا، خدمة الرسائل غير متاحة حاليًا. الرجاء المحاولة لاحقًا أو التواصل مع الدعم الفني.',
+                $status
+            );
+        }
+
         $data = json_decode($body, true);
 
         if (!is_array($data)) {
             $data = ['code' => $status, 'message' => $body];
         }
 
-        // ✅ تحقق إن كانت الاستجابة فعلاً تشير إلى نجاح
         $message = strtolower($data['message'] ?? '');
         $code = $data['code'] ?? $data['Code'] ?? $status;
         $code = (int)$code;
 
-        // ✅ تجاهل الخطأ إذا الرسالة "Success" والكود 200
         if ($code === 200 && $message === 'success') {
             return null;
         }
@@ -104,7 +111,7 @@ class DreamSmsException extends Exception
         if (isset(self::$messagesAr[$code])) {
             $message = self::$messagesAr[$code];
         } else {
-            $message = $data['message'] ?? $data['Description'] ?? 'خطأ غير معروف';
+            $message = $data['message'] ?? $data['Description'] ?? 'حدث خطأ غير متوقع أثناء الاتصال بالخدمة.';
         }
 
         $exception = new static($message, $code);
@@ -112,6 +119,8 @@ class DreamSmsException extends Exception
 
         return $exception;
     }
+
+
 
 
     /**
