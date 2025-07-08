@@ -83,7 +83,7 @@ class DreamSmsException extends Exception
      * @param int    $status  HTTP status code
      * @return static
      */
-    public static function fromResponse(string $body, int $status): self
+    public static function fromResponse(string $body, int $status): ?self
     {
         $data = json_decode($body, true);
 
@@ -91,8 +91,15 @@ class DreamSmsException extends Exception
             $data = ['code' => $status, 'message' => $body];
         }
 
+        // ✅ تحقق إن كانت الاستجابة فعلاً تشير إلى نجاح
+        $message = strtolower($data['message'] ?? '');
         $code = $data['code'] ?? $data['Code'] ?? $status;
         $code = (int)$code;
+
+        // ✅ تجاهل الخطأ إذا الرسالة "Success" والكود 200
+        if ($code === 200 && $message === 'success') {
+            return null;
+        }
 
         if (isset(self::$messagesAr[$code])) {
             $message = self::$messagesAr[$code];
