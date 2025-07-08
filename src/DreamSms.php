@@ -57,21 +57,42 @@ class DreamSms
         $response = Http::asForm()->post("{$this->baseUrl}/{$endpoint}", $data);
 
         if (!$response->successful()) {
-            throw DreamSmsException::fromResponse($response->body(), $response->status());
+            $exception = DreamSmsException::fromResponse($response->body(), $response->status());
+            if ($exception !== null) {
+                throw $exception;
+            }
+        }
+
+        // استجابة Success كنص خام
+        $body = trim($response->body());
+        if ($body === 'Success') {
+            return ['message' => 'Success', 'code' => 200];
         }
 
         $jsonResponse = $response->json();
 
         if (!is_array($jsonResponse)) {
-            throw DreamSmsException::fromResponse($response->body(), $response->status());
+            $exception = DreamSmsException::fromResponse($response->body(), $response->status());
+            if ($exception !== null) {
+                throw $exception;
+            }
+
+            // fallback return safe array to avoid null return
+            return ['message' => $body];
         }
 
-        if (is_numeric($jsonResponse) && (int)$jsonResponse < 0) {
-            throw DreamSmsException::fromResponse($response->body(), (int)$jsonResponse);
+        if (isset($jsonResponse['code']) && (int)$jsonResponse['code'] < 0) {
+            $exception = DreamSmsException::fromResponse($response->body(), (int)$jsonResponse['code']);
+            if ($exception !== null) {
+                throw $exception;
+            }
         }
 
         return $jsonResponse;
     }
+
+
+
 
 
     /**
