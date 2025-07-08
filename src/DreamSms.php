@@ -57,11 +57,14 @@ class DreamSms
         $response = Http::asForm()->post("{$this->baseUrl}/{$endpoint}", $data);
 
         if (!$response->successful()) {
-            throw new DreamSmsException($response->body(), $response->status());
+            throw DreamSmsException::fromResponse($response->body(), $response->status());
         }
 
         $jsonResponse = $response->json();
 
+        if (!is_array($jsonResponse)) {
+            throw DreamSmsException::fromResponse($response->body(), $response->status());
+        }
 
         if (is_numeric($jsonResponse) && (int)$jsonResponse < 0) {
             throw DreamSmsException::fromResponse($response->body(), (int)$jsonResponse);
@@ -69,6 +72,7 @@ class DreamSms
 
         return $jsonResponse;
     }
+
 
     /**
      * Expose raw OAuth token endpoint.
