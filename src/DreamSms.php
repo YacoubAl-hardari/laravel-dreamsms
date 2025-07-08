@@ -59,12 +59,29 @@ class DreamSms
         if (!$response->successful()) {
             $exception = DreamSmsException::fromResponse($response->body(), $response->status());
             if ($exception !== null) {
-                throw $exception;
+                return [
+                    'message' => $exception->getMessage(),
+                    'code'    => $exception->getCode(),
+                ];
             }
         }
 
-        // استجابة Success كنص خام
         $body = trim($response->body());
+
+        if (is_numeric($body)) {
+            if ((int)$body < 0) {
+                $exception = DreamSmsException::fromResponse($body, (int)$body);
+                if ($exception !== null) {
+                    return [
+                        'message' => $exception->getMessage(),
+                        'code'    => $exception->getCode(),
+                    ];
+                }
+            }
+
+            return ['code' => 200, 'balance' => (int)$body];
+        }
+
         if ($body === 'Success') {
             return ['message' => 'Success', 'code' => 200];
         }
@@ -72,24 +89,21 @@ class DreamSms
         $jsonResponse = $response->json();
 
         if (!is_array($jsonResponse)) {
-            $exception = DreamSmsException::fromResponse($response->body(), $response->status());
+            $exception = DreamSmsException::fromResponse($body, $response->status());
             if ($exception !== null) {
-                throw $exception;
+                return [
+                    'message' => $exception->getMessage(),
+                    'code'    => $exception->getCode(),
+                ];
             }
 
-            // fallback return safe array to avoid null return
-            return ['message' => $body];
-        }
-
-        if (isset($jsonResponse['code']) && (int)$jsonResponse['code'] < 0) {
-            $exception = DreamSmsException::fromResponse($response->body(), (int)$jsonResponse['code']);
-            if ($exception !== null) {
-                throw $exception;
-            }
+            return ['message' => $body, 'code' => 400];
         }
 
         return $jsonResponse;
     }
+
+
 
 
 
