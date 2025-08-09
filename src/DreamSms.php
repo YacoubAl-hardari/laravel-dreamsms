@@ -103,12 +103,7 @@ class DreamSms
         return $jsonResponse;
     }
 
-
-
-
-
-
-
+    
     /**
      * Expose raw OAuth token endpoint.
      */
@@ -121,12 +116,10 @@ class DreamSms
         ]);
     }
 
-    public function register(array $user): array
+    public function register(array $payload): array
     {
-        return $this->post('Register', array_merge($user, [
-            'user'       => $this->user,
-            'secret_key' => $this->secretKey,
-        ]));
+        // ['user','password','name','mobile','email']
+        return $this->post('Register', $payload);
     }
 
     public function activate(string $username, string $code): array
