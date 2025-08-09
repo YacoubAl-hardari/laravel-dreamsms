@@ -11,17 +11,17 @@
     "sms-sending",
     "api-client"
   ],
-  "homepage": "https://github.com/YacoubAl-haidari/laravel-dreamsms",
-  "repository": "https://github.com/YacoubAl-haidari/laravel-dreamsms.git",
+  "homepage": "https://github.com/YacoubAl-hardari/laravel-dreamsms",
+  "repository": "https://github.com/YacoubAl-hardari/laravel-dreamsms.git",
   "support": {
-    "issues": "https://github.com/YacoubAl-haidari/laravel-dreamsms/issues",
-    "source": "https://github.com/YacoubAl-haidari/laravel-dreamsms"
+    "issues": "https://github.com/YacoubAl-hardari/laravel-dreamsms/issues",
+    "source": "https://github.com/YacoubAl-hardari/laravel-dreamsms"
   },
   "authors": [
     {
-      "name": "Yacoub Al-haidari",
+      "name": "Yacoub Al-hardari",
       "role": "Maintainer",
-      "homepage": "https://github.com/YacoubAl-haidari"
+      "homepage": "https://github.com/YacoubAl-hardari"
     }
   ],
   "type": "library",
