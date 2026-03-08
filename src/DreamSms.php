@@ -24,7 +24,7 @@ class DreamSms
         ?string $senderName = null,
     ) {
         $this->baseUrl      = rtrim($baseUrl ?? config('dreamsms.base_url'), '/');
-        $this->user         = $user ?? config('dreamsms.account_username');
+        $this->user         = $user ?? config('dreamsms.user');
         $this->secretKey    = $secretKey ?? config('dreamsms.secret_key');
         $this->clientId     = $clientId ?? config('dreamsms.client_id');
         $this->clientSecret = $clientSecret ?? config('dreamsms.client_secret');
@@ -57,53 +57,58 @@ class DreamSms
         $response = Http::asForm()->post("{$this->baseUrl}/{$endpoint}", $data);
 
         if (!$response->successful()) {
-            $exception = DreamSmsException::fromResponse($response->body(), $response->status());
-            if ($exception !== null) {
-                return [
-                    'message' => $exception->getMessage(),
-                    'code'    => $exception->getCode(),
-                ];
-            }
-        }
-
-        $body = trim($response->body());
-
-        if (is_numeric($body)) {
-            if ((int)$body < 0) {
-                $exception = DreamSmsException::fromResponse($body, (int)$body);
-                if ($exception !== null) {
-                    return [
-                        'message' => $exception->getMessage(),
-                        'code'    => $exception->getCode(),
-                    ];
-                }
-            }
-
-            return ['code' => 200, 'balance' => (int)$body];
-        }
-
-        if ($body === 'Success') {
-            return ['message' => 'Success', 'code' => 200];
+            throw new DreamSmsException($response->body(), $response->status());
         }
 
         $jsonResponse = $response->json();
+        $body = trim((string) $response->body());
 
-        if (!is_array($jsonResponse)) {
-            $exception = DreamSmsException::fromResponse($body, $response->status());
-            if ($exception !== null) {
-                return [
-                    'message' => $exception->getMessage(),
-                    'code'    => $exception->getCode(),
-                ];
-            }
-
-            return ['message' => $body, 'code' => 400];
+        if (is_array($jsonResponse)) {
+            return $jsonResponse;
         }
 
-        return $jsonResponse;
+        if (is_numeric($jsonResponse)) {
+            $numericCode = (int) $jsonResponse;
+
+            if ($numericCode < 0) {
+                throw DreamSmsException::fromResponse($response->body(), $numericCode);
+            }
+
+            return [
+                'message' => 'success',
+                'code' => 200,
+                'result' => $numericCode,
+            ];
+        }
+
+        if ($body !== '' && is_numeric($body)) {
+            $numericCode = (int) $body;
+
+            if ($numericCode < 0) {
+                throw DreamSmsException::fromResponse($response->body(), $numericCode);
+            }
+
+            return [
+                'message' => 'success',
+                'code' => 200,
+                'result' => $numericCode,
+            ];
+        }
+
+        if ($body !== '') {
+            return [
+                'message' => 'success',
+                'code' => 200,
+                'result' => $body,
+            ];
+        }
+
+        return [
+            'message' => 'success',
+            'code' => 200,
+        ];
     }
 
-    
     /**
      * Expose raw OAuth token endpoint.
      */
@@ -116,10 +121,12 @@ class DreamSms
         ]);
     }
 
-    public function register(array $payload): array
+    public function register(array $user): array
     {
-        // ['user','password','name','mobile','email']
-        return $this->post('Register', $payload);
+        return $this->post('Register', array_merge($user, [
+            'user'       => $this->user,
+            'secret_key' => $this->secretKey,
+        ]));
     }
 
     public function activate(string $username, string $code): array
