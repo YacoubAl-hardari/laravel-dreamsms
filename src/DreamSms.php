@@ -24,7 +24,7 @@ class DreamSms
         ?string $senderName = null,
     ) {
         $this->baseUrl      = rtrim($baseUrl ?? config('dreamsms.base_url'), '/');
-        $this->user         = $user ?? config('dreamsms.user');
+        $this->user         = $user ?? config('dreamsms.account_username');
         $this->secretKey    = $secretKey ?? config('dreamsms.secret_key');
         $this->clientId     = $clientId ?? config('dreamsms.client_id');
         $this->clientSecret = $clientSecret ?? config('dreamsms.client_secret');
